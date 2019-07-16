@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node app.js",
+    "start": "npx sequelize db:migrate && babel-node app.js",
     "dev": "nodemon --exec babel-node app.js",
     "migrate": "node_modules/.bin/sequelize db:migrate:undo:all && node_modules/.bin/sequelize db:migrate",
     "start:heroku": "npx sequelize db:migrate && babel-node app.js"
