@@ -19,13 +19,41 @@ const event = {
     notificationTime: 7,
     message: message.value,
 }
-
 const myHeaders = new Headers();
 myHeaders.append('Accept', 'application/json');
 myHeaders.append('Content-type', 'application/json');
 
+const processQueries = (queries) => {
+    let queryArray = [];
+    queries = queries.forEach((queryString) => {
+        const queryData = queryString.split('=');
+        queryArray.push({ [queryData[0]]: queryData[1] });
+    });
+
+    const queryObject = queryArray.reduce((oneObject = {}, singleObject) => {
+        oneObject = { ...oneObject, ...singleObject };
+        return oneObject;
+    });
+    return queryObject;
+};
+
+const loadEvent = async (e) => {
+    e.preventDefault();
+    const queries = processQueries(
+        window.location.search.replace('?', '').split('&')
+    );
+
+    const event = await fetch(`../events/${queries.id}`);
+    const json = await event.json();
+    console.log(json);
+
+    target.value = json.event.target;
+}
+
+
 const handleClick = (e) => {
     e.preventDefault();
+
     const type = 'Birtday';
     const day = 12;
     const month = 05;
@@ -56,3 +84,4 @@ const handleClick = (e) => {
 };
 
 sendNow.addEventListener('click', handleClick);
+document.addEventListener('DOMContentLoaded', loadEvent);
